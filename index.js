@@ -30,6 +30,9 @@ router.route('/users')
     .put(authController.isAuthenticated, userController.putUser)
     .delete(authController.isAuthenticated, userController.deleteUser);
 
+router.route('/users/:id')
+    .get(authController.isAuthenticated, userController.getUser);
+
 // Register all our routes with /api
 app.use('/api', router);
 

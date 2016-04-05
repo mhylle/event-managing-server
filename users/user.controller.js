@@ -4,9 +4,8 @@
 var User = require('./user');
 var UUID = require('../utils/uuid');
 exports.postUser = function (req, res) {
-
     var user = new User({
-        id: req.body.id ? req.body.id : UUID.generate(),
+        id: req.body.id ? req.body.id : UUID.generate().generate(),
         username: req.body.username,
         firstname: req.body.firstname,
         middlename: req.body.middlename ? req.body.middlename : null,
@@ -17,7 +16,7 @@ exports.postUser = function (req, res) {
         avatar: req.body.avatar ? req.body.avatar : null
     });
 
-    user.save(function (error) {
+    user.save(req, function (error) {
         if (error) {
             return res.send(error);
         }
@@ -35,10 +34,25 @@ exports.getUsers = function (req, res) {
     });
 };
 
+exports.getUser = function (req, res) {
+    User.find({id: req.params.id}, function (error, user) {
+        if (error) {
+            return res.send(error);
+        }
+        res.json(user);
+    })
+};
+
 exports.putUser = function (req, res) {
     // todo implement
 };
 
 exports.deleteUser = function (req, res) {
-    // todo implement
+    User.remove({username: req.body.username}, function (error) {
+        if (error) {
+            res.send(error);
+        } else {
+            res.send({message: 'deleted'});
+        }
+    });
 };

@@ -7,8 +7,8 @@ var bcrypt = require('bcrypt-nodejs');
 var UserSchema = new mongoose.Schema({
     id: {type: String, unique: true, required: true},
     username: {type: String, unique: true, required: true},
-    hash: {type: String, required: true},
-    salt: {type: String, required: true},
+    hash: {type: String},
+    salt: {type: String},
     firstname: {type: String, required: true},
     middlename: {type: String},
     lastname: {type: String, required: true},
@@ -16,10 +16,10 @@ var UserSchema = new mongoose.Schema({
     phone: {type: String},
     birthday: {type: Date},
     avatar: {type: String},
-    groups: {type: Array, required: true}
+    groups: {type: Array}
 });
 
-UserSchema.pre('save', function (callback) {
+UserSchema.pre('save', function (next, req, callback) {
     var user = this;
 
     bcrypt.genSalt(36, function (error, salt) {
@@ -35,10 +35,11 @@ UserSchema.pre('save', function (callback) {
 
             user.hash = hash;
             user.salt = salt;
-            callback();
+            next(callback);
         });
     });
-    callback();
+
+    // callback();
     // todo ensure any stuff that needs to be done before a save is done here..
 });
 
