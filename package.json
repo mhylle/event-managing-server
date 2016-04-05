@@ -1,0 +1,23 @@
+{
+  "name": "event-managing-server",
+  "version": "0.1.0",
+  "description": "Server side code for the event-managing system. This module will provide the rest API for the event-managing application",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mhylle/event-managing-server"
+  },
+  "keywords": [
+    "events",
+    "event-managing.com"
+  ],
+  "author": "Martin Hylleberg",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5"
+  }
+}
