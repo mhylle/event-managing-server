@@ -52,9 +52,24 @@ UserSchema.methods.verifyPassword = function (password, callback) {
         return callback('no userhash, something is wrong');
     }
 
-    var hash = bcrypt.hashSync(password, salt);
-    var compareSync = bcrypt.compareSync(hash, userhash);
-    callback(null, compareSync);
+    bcrypt.hash(password, salt, null, function (error, hash) {
+        if (error) {
+            return callback(null, false);
+        }
+        console.log('hash:    ' + hash);
+        console.log('userhash ' + userhash);
+        console.log('should they be the same? ' + hash === userhash);
+        bcrypt.compare(hash, userhash, function (error, result) {
+            if (error) {
+                callback(null, false);
+            } else {
+                callback(null, result);
+            }
+        });
+
+    });
+    // var compareSync = bcrypt.compareSync(hash, userhash);
+    // callback(null, compareSync);
 };
 
 module.exports = mongoose.model('User', UserSchema);
