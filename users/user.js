@@ -2,10 +2,10 @@
  * Created by mah on 05-04-2016.
  */
 var mongoose = require('mongoose');
+var ObjectId = require('mongoose').ObjectID;
 var bcrypt = require('bcryptjs');
 
 var UserSchema = new mongoose.Schema({
-    id: {type: String, unique: true, required: true},
     username: {type: String, unique: true, required: true},
     hash: {type: String},
     firstname: {type: String, required: true},

@@ -2,10 +2,9 @@
  * Created by mah on 05-04-2016.
  */
 var User = require('./user');
-var UUID = require('../utils/uuid');
+
 exports.postUser = function (req, res) {
     var user = new User({
-        id: req.body.id ? req.body.id : UUID.generate().generate(),
         username: req.body.username,
         firstname: req.body.firstname,
         middlename: req.body.middlename ? req.body.middlename : null,
@@ -20,7 +19,7 @@ exports.postUser = function (req, res) {
         if (error) {
             return res.send(error);
         }
-        res.json({location: '/api/users/' + user.id});
+        res.json({location: '/api/users/' + user._id});
     });
 };
 
@@ -35,7 +34,7 @@ exports.getUsers = function (req, res) {
 };
 
 exports.getUser = function (req, res) {
-    User.find({id: req.params.id}, function (error, user) {
+    User.findOne({_id: req.params.id}, function (error, user) {
         if (error) {
             return res.send(error);
         }
@@ -48,7 +47,7 @@ exports.putUser = function (req, res) {
 };
 
 exports.deleteUser = function (req, res) {
-    User.remove({username: req.body.username}, function (error) {
+    User.remove({_id: req.body.id}, function (error) {
         if (error) {
             res.send(error);
         } else {
