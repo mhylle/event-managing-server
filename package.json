@@ -28,5 +28,8 @@
     "passport": "^0.3.2",
     "passport-http": "^0.3.0",
     "passport-http-bearer": "^1.0.1"
+  },
+  "dependencies": {
+    "lodash": "^4.9.0"
   }
 }

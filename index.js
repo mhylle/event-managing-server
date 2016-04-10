@@ -25,26 +25,34 @@ app.use(passport.initialize());
 
 var router = express.Router();
 
+
+//<editor-fold desc="Users">
 router.route('/users')
     .post(userController.postUser)
-    .get(authController.isAuthenticated, userController.getUsers)
-    .put(authController.isAuthenticated, userController.putUser)
-    .delete(authController.isAuthenticated, userController.deleteUser);
-
-router.route('/groups')
-    .post(groupController.postGroup)
-    .get(authController.isAuthenticated, groupController.getGroups)
-    .put(authController.isAuthenticated, groupController.putGroup)
-    .delete(authController.isAuthenticated, groupController.deleteGroup);
+    .get(authController.isAuthenticated, userController.getUsers);
 
 
 router.route('/users/:id')
-    .get(authController.isAuthenticated, userController.getUser);
+    .get(authController.isAuthenticated, userController.getUser)
+    .put(authController.isAuthenticated, userController.putUser)
+    .delete(authController.isAuthenticated, userController.deleteUser);
+//</editor-fold>
+
+//<editor-fold desc="Groups">
+router.route('/groups')
+    .post(groupController.postGroup)
+    .get(authController.isAuthenticated, groupController.getGroups)
 
 router.route('/groups/:id')
-    .get(authController.isAuthenticated, groupController.getGroup);
-router.route('/groups/:id/user/:uid')
-    .post(authController.isAuthenticated, groupController.addUserToGroup)
+    .get(authController.isAuthenticated, groupController.getGroup)
+    .put(authController.isAuthenticated, groupController.putGroup)
+    .delete(authController.isAuthenticated, groupController.deleteGroup);
+router.route('/groups/:id/users/:uid')
+    .post(authController.isAuthenticated, groupController.addUserToGroup);
+router.route('/groups/:id/users/:uid')
+    .delete(authController.isAuthenticated, groupController.removeUserFromGroup);
+//</editor-fold>
+
 // Register all our routes with /api
 app.use('/api', router);
 
