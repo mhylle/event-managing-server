@@ -151,6 +151,7 @@ exports.removeEventFromGroup = function (req, res) {
     });
 };
 
-exports.isAuthenticated = function(req,res) {
+exports.isAuthorized = function(req,res) {
+    return true;
     // todo figure out how to verify that the current user has access to the thing being tested.
 };
