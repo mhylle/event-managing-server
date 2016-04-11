@@ -7,6 +7,7 @@ var bodyparser = require('body-parser');
 var authController = require('./security/auth.controller');
 var userController = require('./users/user.controller');
 var groupController = require('./groups/group.controller');
+var eventController = require('./events/event.controller');
 mongoose.connect('mongodb://localhost:27017/event-managing');
 
 
@@ -40,8 +41,8 @@ router.route('/users/:id')
 
 //<editor-fold desc="Groups">
 router.route('/groups')
-    .post(groupController.postGroup)
-    .get(authController.isAuthenticated, groupController.getGroups)
+    .post(authController.isAuthenticated, groupController.postGroup)
+    .get(authController.isAuthenticated, groupController.getGroups);
 
 router.route('/groups/:id')
     .get(authController.isAuthenticated, groupController.getGroup)
@@ -51,6 +52,21 @@ router.route('/groups/:id/users/:uid')
     .post(authController.isAuthenticated, groupController.addUserToGroup);
 router.route('/groups/:id/users/:uid')
     .delete(authController.isAuthenticated, groupController.removeUserFromGroup);
+//</editor-fold>
+
+//<editor-fold desc="Events">
+router.route('/events')
+    .post(authController.isAuthenticated, groupController.isAuthorized, eventController.postEvent)
+    .get(authController.isAuthenticated, groupController.isAuthorized, eventController.getEvents);
+
+router.route('/events/:id')
+    .get(authController.isAuthenticated, groupController.isAuthorized, eventController.getEvent)
+    .put(authController.isAuthenticated, groupController.isAuthorized, eventController.putEvent)
+    .delete(authController.isAuthenticated, groupController.isAuthorized, eventController.deleteEvent);
+router.route('/events/:id/users/:uid')
+    .post(authController.isAuthenticated, groupController.isAuthorized, eventController.addUserToEvent);
+router.route('/events/:id/users/:uid')
+    .delete(authController.isAuthenticated, groupController.isAuthorized, eventController.removeUserFromEvent);
 //</editor-fold>
 
 // Register all our routes with /api

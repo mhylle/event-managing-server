@@ -1,9 +1,9 @@
 /**
  * Created by mah on 05-04-2016.
  */
-var _ = require('lodash');
 var Group = require('./group');
 var User = require('../users/user');
+var Event = require('../events/event');
 
 exports.postGroup = function (req, res) {
     var group = new Group({
@@ -108,4 +108,49 @@ exports.removeUserFromGroup = function (req, res) {
         });
 
     });
+};
+
+exports.addEventToGroup = function (req, res) {
+    Group.findOne({_id: req.params.id}, function (error, group) {
+        if (error) {
+            return res.send(error);
+        }
+        Event.findOne({_id: req.params.uid}, function (error, event) {
+            if (error) {
+                return res.send(error);
+            }
+            group.events.push(event);
+            group.save(req, function (error) {
+                if (error) {
+                    return res.send(error);
+                }
+                res.json({location: '/api/groups/' + group._id});
+            });
+        });
+    });
+};
+
+exports.removeEventFromGroup = function (req, res) {
+    Group.findOne({_id: req.params.id}, function (error, group) {
+        if (error) {
+            return res.send(error);
+        }
+        Event.findOne({_id: req.params.uid}, function (error, event) {
+            if (error) {
+                return res.send(error);
+            }
+
+            group.events.pull(event);
+            group.save(req, function (error) {
+                if (error) {
+                    return res.send(error);
+                }
+                res.json({location: '/api/groups/' + group._id});
+            });
+        });
+    });
+};
+
+exports.isAuthenticated = function(req,res) {
+    // todo figure out how to verify that the current user has access to the thing being tested.
 };

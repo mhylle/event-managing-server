@@ -9,6 +9,7 @@ var GroupSchema = new mongoose.Schema({
     type: {type: String, required: true},
     avatar: {type: String},
     users: [{type: ObjectId, ref: 'User'}],
+    events: [{type: ObjectId, ref: 'Event'}],
     administrators: [{type: ObjectId, ref: 'User'}]
 });
 
