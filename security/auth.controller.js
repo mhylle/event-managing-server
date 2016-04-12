@@ -51,3 +51,6 @@
 //         // Successful authentication, redirect home.
 //         res.redirect('/');
 //     });
+exports.isAuthenticated = function() {
+    return true;
+};

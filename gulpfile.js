@@ -16,6 +16,6 @@ function runCommand(command) {
 
 //Running mongo
 //http://stackoverflow.com/a/28048696/46810
-gulp.task('start-mongo', runCommand('mongod --dbpath ./data/'));
+gulp.task('start-mongo', runCommand('mongod.exe --dbpath ./data/'));
 gulp.task('stop-mongo', runCommand('mongo --eval "use admin; db.shutdownServer();"'));
 gulp.task('start-app', runCommand('node index.js'));

@@ -74,11 +74,11 @@ var router = express.Router();
 router.route('/login')
     .post(loginController.login);
 
-router.route('/oauth2/auth')
-    .get(authController.authorization)
-    .post();
-router.route('/oauth2/token')
-    .get();
+// router.route('/oauth2/auth')
+//     .get(authController.authorization)
+//     .post();
+// router.route('/oauth2/token')
+//     .get();
 //</editor-fold>
 
 //<editor-fold desc="Users">
