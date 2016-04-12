@@ -4,6 +4,7 @@ var passport = require('passport');
 var mongoose = require('mongoose');
 var bodyparser = require('body-parser');
 var config = require('./libs/config');
+var oauth2 = require('./security/oauth2');
 // var favicon = require('serve-favicon');
 var morgan = require('morgan');
 var methodOverride = require('method-override');
@@ -41,7 +42,13 @@ app.use(session({
 }));
 
 app.use(passport.initialize());
-
+require('./security/oauth');
+app.post('/oauth/token', oauth2.token);
+app.get('/userInfo',
+passport.authenticate('bearer', {session:false}),
+function (req,res) {
+    res.json({user_id: req.user.userId, name: req.user.username, scope: req.authInfo.scope})
+});
 
 app.use(function (req, res, next) {
     res.status(404);
