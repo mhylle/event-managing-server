@@ -7,8 +7,8 @@ var crypto = require('crypto');
 
 var UserSchema = new mongoose.Schema({
     username: {type: String, unique: true, required: true},
-    hash: {type: String, required: true},
-    salt: {type: String, required: true},
+    hash: {type: String},
+    salt: {type: String},
     firstname: {type: String, required: true},
     middlename: {type: String},
     lastname: {type: String, required: true},
@@ -44,6 +44,7 @@ UserSchema.virtual('userId')
     .get(function () {
         return this.id;
     });
+
 UserSchema.virtual('password')
     .set(function (password) {
         this._plainPassword = password;

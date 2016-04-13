@@ -43,29 +43,11 @@ app.use(session({
 
 app.use(passport.initialize());
 require('./security/oauth');
-app.post('/oauth/token', oauth2.token);
-app.get('/userInfo',
+app.post('/oauth/token/', oauth2.token);
+app.get('/api/userInfo',
 passport.authenticate('bearer', {session:false}),
 function (req,res) {
     res.json({user_id: req.user.userId, name: req.user.username, scope: req.authInfo.scope})
-});
-
-app.use(function (req, res, next) {
-    res.status(404);
-    log.debug('URL not found: %s', req.url);
-    res.send({error: 'Not found'});
-    return;
-});
-
-// app.use(function (err, req, res, next) {
-//     res.status(err.status || 500);
-//     log.error('Internal error(%d): %s', res.statusCode, err.message);
-//     res.send({error: err.message});
-//     return;
-// });
-
-app.get('/ErrorExample', function (req, res, next) {
-    next(new Error('Random Error'));
 });
 
 var router = express.Router();
@@ -84,11 +66,11 @@ router.route('/login')
 //<editor-fold desc="Users">
 router.route('/users')
     .post(userController.postUser)
-    .get(authController.isAuthenticated, userController.getUsers);
+    .get(userController.getUsers);
 
 
 router.route('/users/:id')
-    .get(authController.isAuthenticated, userController.getUser)
+    .get(userController.getUser)
     .put(authController.isAuthenticated, userController.putUser)
     .delete(authController.isAuthenticated, userController.deleteUser);
 //</editor-fold>
