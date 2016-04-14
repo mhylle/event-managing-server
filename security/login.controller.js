@@ -1,21 +1,44 @@
-/**
- * Created by mah on 11-04-2016.
- */
-var passport = require('passport');
-
+// var passport = require('passport');
+var User = require('../users/user');
+var UUID = require('../utils/uuid').generate();
 exports.login = function (req, res, next) {
-    var callback = req.query.callback || '/profile';
-    passport.authenticate('local', function (error, user, info) {
-        if (error || !user) {
-            res.send('unable to login');
+    var authorization = req.headers['authorization'];
+    if (!authorization) {
+        return res.json({message: 'Must supply credentials'});
+    }
+
+    var parts = authorization.split(' ');
+    if (parts.length < 2) {
+        return res.json({message: 'Must supply credentials1'});
+    }
+    var credentials = new Buffer(parts[1], 'base64').toString().split(':');
+    User.findOne({username: credentials[0]}, function (error, user) {
+        if (error) {
+            return res.send(error);
         }
 
-        req.logIn(user, function (error) {
-            if (error) {
-                return next(error);
-            }
+        if (!user) {
+            return res.json({message: 'User not found'});
+        }
 
-            return res.redirect(callback);
-        });
-    })(req, res, next);
+        if (user.checkPassword(credentials[1])) {
+            return res.json({accessToken: UUID.generate()});
+        } else {
+            return res.json({message: 'Password did not match'});
+        }
+    });
+    // var callback = req.query.callback || '/profile';
+    // passport.authenticate('local', function (error, user, info) {
+    //     if (error || !user) {
+    //         res.send('unable to login');
+    //     }
+    //
+    //     req.logIn(user, function (error) {
+    //         if (error) {
+    //             return next(error);
+    //         }
+    //
+    //         return res.redirect(callback);
+    //     });
+    // })(req, res, next);
 };

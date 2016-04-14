@@ -11,7 +11,7 @@ var methodOverride = require('method-override');
 
 var log = require('./libs/log')(module);
 
-var authController = require('./security/auth.controller');
+// var authController = require('./security/auth.controller');
 var userController = require('./users/user.controller');
 var groupController = require('./groups/group.controller');
 var eventController = require('./events/event.controller');
@@ -42,20 +42,20 @@ app.use(session({
 }));
 
 app.use(passport.initialize());
-require('./security/oauth');
-app.post('/oauth/token', oauth2.token);
-app.get('/userInfo',
-passport.authenticate('bearer', {session:false}),
-function (req,res) {
-    res.json({user_id: req.user.userId, name: req.user.username, scope: req.authInfo.scope})
-});
+// require('./security/oauth');
+// app.post('/oauth/token', oauth2.token);
+// app.get('/userInfo',
+//     passport.authenticate('bearer', {session: false}),
+//     function (req, res) {
+//         res.json({user_id: req.user.userId, name: req.user.username, scope: req.authInfo.scope})
+//     });
 
-app.use(function (req, res, next) {
-    res.status(404);
-    log.debug('URL not found: %s', req.url);
-    res.send({error: 'Not found'});
-    return;
-});
+// app.use(function (req, res, next) {
+//     res.status(404);
+//     log.debug('URL not found: %s', req.url);
+//     res.send({error: 'Not found'});
+//     return;
+// });
 
 // app.use(function (err, req, res, next) {
 //     res.status(err.status || 500);
@@ -84,43 +84,43 @@ router.route('/login')
 //<editor-fold desc="Users">
 router.route('/users')
     .post(userController.postUser)
-    .get(authController.isAuthenticated, userController.getUsers);
+    .get(userController.getUsers);
 
 
 router.route('/users/:id')
-    .get(authController.isAuthenticated, userController.getUser)
-    .put(authController.isAuthenticated, userController.putUser)
-    .delete(authController.isAuthenticated, userController.deleteUser);
+    .get(userController.getUser)
+    .put(userController.putUser)
+    .delete(userController.deleteUser);
 //</editor-fold>
 
 //<editor-fold desc="Groups">
 router.route('/groups')
-    .post(authController.isAuthenticated, groupController.postGroup)
-    .get(authController.isAuthenticated, groupController.getGroups);
+    .post(groupController.postGroup)
+    .get(groupController.getGroups);
 
 router.route('/groups/:id')
-    .get(authController.isAuthenticated, groupController.getGroup)
-    .put(authController.isAuthenticated, groupController.putGroup)
-    .delete(authController.isAuthenticated, groupController.deleteGroup);
+    .get(groupController.getGroup)
+    .put(groupController.putGroup)
+    .delete(groupController.deleteGroup);
 router.route('/groups/:id/users/:uid')
-    .post(authController.isAuthenticated, groupController.addUserToGroup);
+    .post(groupController.addUserToGroup);
 router.route('/groups/:id/users/:uid')
-    .delete(authController.isAuthenticated, groupController.removeUserFromGroup);
+    .delete(groupController.removeUserFromGroup);
 //</editor-fold>
 
 //<editor-fold desc="Events">
 router.route('/events')
-    .post(authController.isAuthenticated, groupController.isAuthorized, eventController.postEvent)
-    .get(authController.isAuthenticated, groupController.isAuthorized, eventController.getEvents);
+    .post(eventController.postEvent)
+    .get(eventController.getEvents);
 
 router.route('/events/:id')
-    .get(authController.isAuthenticated, groupController.isAuthorized, eventController.getEvent)
-    .put(authController.isAuthenticated, groupController.isAuthorized, eventController.putEvent)
-    .delete(authController.isAuthenticated, groupController.isAuthorized, eventController.deleteEvent);
+    .get(eventController.getEvent)
+    .put(eventController.putEvent)
+    .delete(eventController.deleteEvent);
 router.route('/events/:id/users/:uid')
-    .post(authController.isAuthenticated, groupController.isAuthorized, eventController.addUserToEvent);
+    .post(eventController.addUserToEvent);
 router.route('/events/:id/users/:uid')
-    .delete(authController.isAuthenticated, groupController.isAuthorized, eventController.removeUserFromEvent);
+    .delete(eventController.removeUserFromEvent);
 //</editor-fold>
 
 // Register all our routes with /api
