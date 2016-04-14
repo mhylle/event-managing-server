@@ -30,6 +30,7 @@ UserSchema.virtual('userId')
     .get(function () {
         return this.id;
     });
+
 UserSchema.virtual('password')
     .set(function (password) {
         this._plainPassword = password;
