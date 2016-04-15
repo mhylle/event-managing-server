@@ -1,6 +1,6 @@
-/**
- * Created by mah on 05-04-2016.
- */
+/* jshint node: true */
+
+"use strict";
 var mongoose = require('mongoose');
 var crypto = require('crypto');
 
@@ -33,12 +33,12 @@ UserSchema.virtual('userId')
 
 UserSchema.virtual('password')
     .set(function (password) {
-        this._plainPassword = password;
+        this.plainPassword = password;
         this.salt = crypto.randomBytes(32).toString('hex');
         this.hash = this.encryptPassword(password);
     })
     .get(function () {
-        return this._plainPassword;
+        return this.plainPassword;
     });
 
 UserSchema.methods.checkPassword = function (password) {

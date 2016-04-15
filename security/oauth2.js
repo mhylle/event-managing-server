@@ -1,6 +1,5 @@
-/**
- * Created by mah on 12-04-2016.
- */
+"use strict";
+
 var oauth2orize = require('oauth2orize');
 var passport = require('passport');
 var crypto = require('crypto');

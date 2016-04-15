@@ -1,3 +1,6 @@
+/* jshint node: true */
+
+"use strict";
 // var passport = require('passport');
 var User = require('../users/user');
 var UUID = require('../utils/uuid').generate();

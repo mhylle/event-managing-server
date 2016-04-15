@@ -1,6 +1,5 @@
-/**
- * Created by mah on 05-04-2016.
- */
+"use strict";
+
 var Group = require('./group');
 var User = require('../users/user');
 var Event = require('../events/event');
