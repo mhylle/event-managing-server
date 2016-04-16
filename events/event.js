@@ -15,7 +15,7 @@ var EventSchema = new mongoose.Schema({
     memberprice: {type: Number},
     nonmemberprice: {type: Number},
     defaultprice: {type: Number},
-    location: {type: ObjectId, ref: 'Location'},
+    location: [{type: ObjectId, ref: 'Location'}],
     users: [{type: ObjectId, ref: 'User'}]
 });
 

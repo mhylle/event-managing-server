@@ -19,6 +19,7 @@ var log = require('./libs/log')(module);
 var userController = require('./users/user.controller');
 var groupController = require('./groups/group.controller');
 var eventController = require('./events/event.controller');
+var locationController = require('./locations/location.controller');
 var loginController = require('./security/login.controller');
 mongoose.connect(config.get('mongoose:uri'));
 var db = mongoose.connection;
@@ -125,6 +126,17 @@ router.route('/events/:id/users/:uid')
     .post(eventController.addUserToEvent);
 router.route('/events/:id/users/:uid')
     .delete(eventController.removeUserFromEvent);
+//</editor-fold>
+
+//<editor-fold desc="Locations">
+router.route('/locations')
+    .post(locationController.postLocation)
+    .get(locationController.getLocations);
+
+router.route('/locations/:id')
+    .get(locationController.getLocation)
+    .put(locationController.putLocation)
+    .delete(locationController.deleteLocation);
 //</editor-fold>
 
 // Register all our routes with /api

@@ -2,12 +2,48 @@
 
 var Event = require('./event');
 var User = require('../users/user');
+var Location = require('../locations/location');
+var User = require('../users/user');
 
-exports.postEvent = function (req, res) {
+function retrieveUserlist(users, done) {
+    if (users) {
+        User.find({_id: {$in: users}}, function (error, users) {
+            if (error) {
+                done(error, null);
+            } else {
+                return done(null, users);
+            }
+        });
+    }
+    done(null, null);
+}
+function retrieveLocations(locations, done) {
+    if (locations) {
+        var locationArray = JSON.parse(locations);
+
+    }
+    done(null, null);
+}
+
+// kav@zertify.co
+// 5711fbd7fdfdf8bc3433ea12
+// 5711fbe4fdfdf8bc3433ea13
+
+function saveEvent(req, locations, users, res) {
     var event = new Event({
         name: req.body.name,
-        type: req.body.type,
-        avatar: req.body.avatar || null
+        avatar: req.body.avatar || null,
+        start: req.body.start,
+        end: req.body.end,
+        signstart: req.body.signstart,
+        signend: req.body.signend,
+        canceldeadline: req.body.canceldeadline,
+        description: req.body.description,
+        memberprice: req.body.memberprice,
+        nonmemberprice: req.body.nonmemberprice,
+        defaultprice: req.body.defaultprice,
+        location: locations,
+        users: users
     });
 
     event.save(req, function (error) {
@@ -16,7 +52,24 @@ exports.postEvent = function (req, res) {
         }
         res.json({location: '/api/events/' + event._id});
     });
-};
+}
+exports.postEvent = function (req, res) {
+    var locations = null;
+    var users = null;
+    if (req.body.location) {
+        var locationArray = JSON.parse(req.body.location);
+        Location.find({_id: {$in: locationArray}}, function (error, locations) {
+            if (error) {
+                return res.send(error);
+            }
+
+            saveEvent(req, locations, users, res);
+        });
+    } else {
+        saveEvent(req, null, users, res);
+    }
+
+}
 
 exports.getEvents = function (req, res) {
     Event.find(function (error, events) {
@@ -34,7 +87,7 @@ exports.getEvent = function (req, res) {
             return res.send(error);
         }
         res.json(event);
-    })
+    });
 };
 
 exports.putEvent = function (req, res) {
@@ -57,11 +110,18 @@ exports.putEvent = function (req, res) {
 };
 
 exports.deleteEvent = function (req, res) {
-    Event.remove({_id: req.param.id}, function (error) {
+    Event.findOne(req.param.id, function (error, event) {
         if (error) {
             res.send(error);
         } else {
-            res.send({message: 'deleted'});
+            event.remove(function (error) {
+                if (error) {
+                    res.send(error);
+                } else {
+                    res.send({message: 'deleted'});
+                }
+            });
+
         }
     });
 };
@@ -80,7 +140,7 @@ exports.addUserToEvent = function (req, res) {
                 if (error) {
                     return res.send(error);
                 }
-                res.json({location: '/api/events/' + group._id});
+                res.json({location: '/api/events/' + event._id});
             });
         });
     });
