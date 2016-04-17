@@ -8,9 +8,11 @@ exports.postGroup = function (req, res) {
     var group = new Group({
         name: req.body.name,
         type: req.body.type,
-        avatar: req.body.avatar ? req.body.avatar : null
+        avatar: req.body.avatar ? req.body.avatar : null,
+        users: req.body.users ? JSON.parse(req.body.users) : null,
+        events: req.body.events ? JSON.parse(req.body.events) : null,
+        administrators: req.body.administrators ? JSON.parse(req.body.administrators) : null
     });
-
     group.save(req, function (error) {
         if (error) {
             return res.send(error);
@@ -35,7 +37,7 @@ exports.getGroup = function (req, res) {
             return res.send(error);
         }
         res.json(group);
-    })
+    });
 };
 
 exports.putGroup = function (req, res) {
@@ -58,11 +60,18 @@ exports.putGroup = function (req, res) {
 };
 
 exports.deleteGroup = function (req, res) {
-    Group.remove({_id: req.param.id}, function (error) {
+    Group.findOne(req.param.id, function (error, group) {
         if (error) {
             res.send(error);
         } else {
-            res.send({message: 'deleted'});
+            group.remove(function (error) {
+                if (error) {
+                    res.send(error);
+                } else {
+                    res.send({message: 'deleted'});
+                }
+            });
+
         }
     });
 };
@@ -75,6 +84,9 @@ exports.addUserToGroup = function (req, res) {
         User.findOne({_id: req.params.uid}, function (error, user) {
             if (error) {
                 return res.send(error);
+            }
+            if (!group.users) {
+                group.users = [];
             }
             group.users.push(user);
             group.save(req, function (error) {
@@ -114,7 +126,7 @@ exports.addEventToGroup = function (req, res) {
         if (error) {
             return res.send(error);
         }
-        Event.findOne({_id: req.params.uid}, function (error, event) {
+        Event.findOne({_id: req.params.eid}, function (error, event) {
             if (error) {
                 return res.send(error);
             }
@@ -134,7 +146,7 @@ exports.removeEventFromGroup = function (req, res) {
         if (error) {
             return res.send(error);
         }
-        Event.findOne({_id: req.params.uid}, function (error, event) {
+        Event.findOne({_id: req.params.eid}, function (error, event) {
             if (error) {
                 return res.send(error);
             }
@@ -150,7 +162,7 @@ exports.removeEventFromGroup = function (req, res) {
     });
 };
 
-exports.isAuthorized = function(req,res) {
+exports.isAuthorized = function (req, res) {
     return true;
     // todo figure out how to verify that the current user has access to the thing being tested.
 };

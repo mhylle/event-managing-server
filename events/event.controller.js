@@ -29,32 +29,46 @@ function retrieveLocations(locations, done) {
 // 5711fbd7fdfdf8bc3433ea12
 // 5711fbe4fdfdf8bc3433ea13
 
-function saveEvent(req, locations, users, res) {
-    var event = new Event({
-        name: req.body.name,
-        avatar: req.body.avatar || null,
-        start: req.body.start,
-        end: req.body.end,
-        signstart: req.body.signstart,
-        signend: req.body.signend,
-        canceldeadline: req.body.canceldeadline,
-        description: req.body.description,
-        memberprice: req.body.memberprice,
-        nonmemberprice: req.body.nonmemberprice,
-        defaultprice: req.body.defaultprice,
-        location: locations,
-        users: users
-    });
+function saveEvent(req, res, event) {
+    var creation = false;
+    if (!event) {
+        creation = true;
+        event = new Event();
+    }
+    event.name = req.body.name ? req.body.name : event.name;
+    event.avatar = req.body.avatar ? req.body.avatar : event.avatar;
+    event.start = req.body.start ? req.body.start : event.start;
+    event.end = req.body.end ? req.body.end : event.end;
+    event.signstart = req.body.signstart ? req.body.signstart : event.signstart;
+    event.signend = req.body.signend ? req.body.signend : event.signend;
+    event.canceldeadline = req.body.canceldeadline ? req.body.canceldeadline : event.canceldeadline;
+    event.description = req.body.description ? req.body.description : event.description;
+    event.memberprice = req.body.memberprice ? req.body.memberprice : event.memberprice;
+    event.nonmemberprice = req.body.nonmemberprice ? req.body.nonmemberprice : event.nonmemberprice;
+    event.defaultprice = req.body.defaultprice ? req.body.defaultprice : event.defaultprice;
+    event.locations = req.body.locations ? JSON.parse(req.body.locations) : event.locations;
+    event.users = req.body.users ? JSON.parse(req.body.users) : event.users;
+    event.administrators = req.body.administrators ? JSON.parse(req.body.administrators) : event.administrators;
 
-    event.save(req, function (error) {
-        if (error) {
-            return res.send(error);
-        }
-        res.json({location: '/api/events/' + event._id});
-    });
+    if (creation) {
+        event.save(req, function (error) {
+            if (error) {
+                return res.send(error);
+            }
+            res.json({location: '/api/events/' + event._id});
+        });
+    } else {
+        event.update(req, function (error, numAffected) {
+            if (error) {
+                return res.send(error);
+            }
+            console.log('Update ' + numAffected + ' records.');
+            res.json({location: '/api/events/' + event._id});
+        });
+    }
 }
+
 exports.postEvent = function (req, res) {
-    var locations = null;
     var users = null;
     if (req.body.location) {
         var locationArray = JSON.parse(req.body.location);
@@ -63,10 +77,10 @@ exports.postEvent = function (req, res) {
                 return res.send(error);
             }
 
-            saveEvent(req, locations, users, res);
+            saveEvent(req, res, locations, users);
         });
     } else {
-        saveEvent(req, null, users, res);
+        saveEvent(req, res, null, users);
     }
 
 }
@@ -96,16 +110,7 @@ exports.putEvent = function (req, res) {
             return res.send(error);
         }
 
-        event.name = req.body.name;
-        event.type = req.body.type;
-        event.avatar = req.body.avatar || null;
-
-        event.save(req, function (error) {
-            if (error) {
-                return res.send(error);
-            }
-            res.json({location: '/api/events/' + event._id});
-        });
+        saveEvent(req, res, event);
     });
 };
 
@@ -157,6 +162,50 @@ exports.removeUserFromEvent = function (req, res) {
             }
 
             event.users.pull(user);
+            event.save(req, function (error) {
+                if (error) {
+                    return res.send(error);
+                }
+                res.json({location: '/api/events/' + event._id});
+            });
+        });
+    });
+};
+
+exports.addLocationToEvent = function (req, res) {
+    Event.findOne({_id: req.params.id}, function (error, event) {
+        if (error) {
+            return res.send(error);
+        }
+        Location.findOne({_id: req.params.lid}, function (error, location) {
+            if (error) {
+                return res.send(error);
+            }
+            if (!event.locations) {
+                event.locations = [];
+            }
+            event.locations.push(location);
+            event.save(req, function (error) {
+                if (error) {
+                    return res.send(error);
+                }
+                res.json({location: '/api/events/' + event._id});
+            });
+        });
+    });
+};
+
+exports.removeLocationFromEvent = function (req, res) {
+    Event.findOne({_id: req.params.id}, function (error, event) {
+        if (error) {
+            return res.send(error);
+        }
+        Location.findOne({_id: req.params.lid}, function (error, location) {
+            if (error) {
+                return res.send(error);
+            }
+
+            event.locations.pull(location);
             event.save(req, function (error) {
                 if (error) {
                     return res.send(error);

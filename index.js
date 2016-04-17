@@ -111,6 +111,10 @@ router.route('/groups/:id/users/:uid')
     .post(groupController.addUserToGroup);
 router.route('/groups/:id/users/:uid')
     .delete(groupController.removeUserFromGroup);
+router.route('/groups/:id/events/:eid')
+    .post(groupController.addEventToGroup);
+router.route('/groups/:id/events/:eid')
+    .delete(groupController.removeEventFromGroup);
 //</editor-fold>
 
 //<editor-fold desc="Events">
@@ -126,6 +130,10 @@ router.route('/events/:id/users/:uid')
     .post(eventController.addUserToEvent);
 router.route('/events/:id/users/:uid')
     .delete(eventController.removeUserFromEvent);
+router.route('/events/:id/locations/:lid')
+    .post(eventController.addLocationToEvent);
+router.route('/events/:id/locations/:lid')
+    .delete(eventController.removeLocationFromEvent);
 //</editor-fold>
 
 //<editor-fold desc="Locations">
