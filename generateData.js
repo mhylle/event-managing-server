@@ -1,14 +1,26 @@
-/**
- * Created by mhylle on 12-04-2016.
- */
-var log = require('./libs/log')(module);
-
 var mongoose = require('mongoose');
 var User = require('./users/user');
-var Client = require('./security/client');
-var AccessToken = require('./security/accesstoken');
-var RefreshToken = require('./security/refreshtoken');
+var UserController = require('./users/user.controller');
+var Group = require('./groups/group');
+var Location = require('./locations/location');
+var Event = require('./events/event');
+
 var faker = require('faker');
+
+exports.createSuperUsers = function() {
+    req = {
+        body: {
+            username: 'mhylle',
+            firstname: 'Martin',
+            lastname: 'Hylleberg',
+            email: 'mhylle@gmail.com',
+            phone: 61791394,
+            birthday: new Date()
+        }
+    }
+    UserController.postUser(req);
+};
+
 
 User.remove({}, function (error) {
     var user = new User({username: "andrey", password: "simplepassword"});
@@ -30,27 +42,6 @@ User.remove({}, function (error) {
                 }
             }
         );
-    }
-});
-Client.remove({}, function (error) {
-    var client = new ClientModel({name: "OurService iOS client v1", clientId: "mobileV1", clientSecret: "abc123456"});
-    client.save(function (error, client) {
-        if (error) {
-            return log.error(error);
-        } else {
-            log.info("New client - %s:%s", client.clientId, client.clientSecret);
-        }
-    });
-});
-
-AccessToken.remove({}, function (err) {
-    if (err) {
-        return log.error(err);
-    }
-});
-RefreshToken.remove({}, function (err) {
-    if (err) {
-        return log.error(err);
     }
 });
 
