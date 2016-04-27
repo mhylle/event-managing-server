@@ -21,9 +21,7 @@ exports.postUser = function (req, res) {
             return res.send(error);
         }
         res.json({location: '/api/users/' + user._id});
-
     });
-    res.send('done');
 };
 
 exports.getUsers = function (req, res) {
