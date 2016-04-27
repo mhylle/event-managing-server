@@ -59,37 +59,31 @@ exports.cleanSuperUsers = function () {
 };
 
 exports.createBaseGroups = function () {
-    var superuser;
     User.findOne({username: 'admin'}, function (error, user) {
         if (error) {
             console.log('got an error while trying to retrive the useruser ', error);
         }
-        superuser = user;
+        req = {
+            body: {
+                name: 'Personaleforeningen',
+                type: 'Public',
+                avatar: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAJuSURBVBgZpcH7a05xHMDx9/ecI/OcXWzZRDPCqMlcFqklKZeSwi9spIRcSwrDL5K/QFJLSoTIJX4yJOQ6lkSYjfV4MGwe2549l7Pn+z3nfIz8INlPe72UiDAYFoNkMUgO/WT/njXAEcCmnwQhBAFifMT3EeMj2iDaIMYgWeOHWu90b1w7o8J9u1cCJ9T8BS55+eC6EImAMYSdHXS3f8EKApwwJMhqUl4GuroZfvdBWrRe4wB1qnyyizbQ3g4VFZBOQ1sbNDbiJZPYvk+OCEE2S2cigVtdTd+MSrf43qOjDrBBWpqPE/8+S5WOhdxcKCuDRAKiUWzPwxbBVtA1qZuixaMJXj1mxN2v30SbXfbB+w875HrDJelJVOJ55UopKCgAY+DpU7TnMUQp0mN6yF07m5K5Wwj8J2Hc+7yvtOHlSSUi/OJv3Zwv2j9nFRcvsZcvh7w85PBhemMxsuP7UKvHUThtEenPbfjJkMT7l5mWphcbLf5w6o/1hllda6IfrpkrV/mtsBDH9/GrRlIwdSlB5h05I0bjRGDUvOmRCRVl9UpE+Ju3bEW+aHPJqZq5cMjUKQSxGN+CRgpXzcGyYyhrGBLEwWRoPvsppUSEf6XmLywVbe4wb/LEVHkH5ASSW1WkHKsHZeURGs3b8y19r9/2rlciwv98OFS1V7lDD5SsXBcRfRMVJHnTkEjbyTBlK8Xr1s7tNaeilx0GYFWU1Iysro3oeD2OU0Dz7XTmWVN8x9g+72KOa1Nz6mOSfg4DsGy0stuxhxbz5saP1Ivnnds2nXl/mn84DOBLNH6rN3FnXKYr7bW2fq9bf+LdBf7jJ8/eN9kzWRDgAAAAAElFTkSuQmCC',
+                users: [user],
+                events: [],
+                administrators: []
+
+            }
+        };
+
+        res = {};
+        res.json = function (data) {
+            console.log('JSON: ' + data);
+        };
+        res.send = function (data) {
+            console.log('Sending: ' + data);
+        };
+        GroupController.postGroup(req, res);
     });
-
-    req = {
-        body: {
-            name: 'Personaleforeningen',
-            type: 'Public',
-            avatar: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAJuSURBVBgZpcH7a05xHMDx9/ecI/OcXWzZRDPCqMlcFqklKZeSwi9spIRcSwrDL5K/QFJLSoTIJX4yJOQ6lkSYjfV4MGwe2549l7Pn+z3nfIz8INlPe72UiDAYFoNkMUgO/WT/njXAEcCmnwQhBAFifMT3EeMj2iDaIMYgWeOHWu90b1w7o8J9u1cCJ9T8BS55+eC6EImAMYSdHXS3f8EKApwwJMhqUl4GuroZfvdBWrRe4wB1qnyyizbQ3g4VFZBOQ1sbNDbiJZPYvk+OCEE2S2cigVtdTd+MSrf43qOjDrBBWpqPE/8+S5WOhdxcKCuDRAKiUWzPwxbBVtA1qZuixaMJXj1mxN2v30SbXfbB+w875HrDJelJVOJ55UopKCgAY+DpU7TnMUQp0mN6yF07m5K5Wwj8J2Hc+7yvtOHlSSUi/OJv3Zwv2j9nFRcvsZcvh7w85PBhemMxsuP7UKvHUThtEenPbfjJkMT7l5mWphcbLf5w6o/1hllda6IfrpkrV/mtsBDH9/GrRlIwdSlB5h05I0bjRGDUvOmRCRVl9UpE+Ju3bEW+aHPJqZq5cMjUKQSxGN+CRgpXzcGyYyhrGBLEwWRoPvsppUSEf6XmLywVbe4wb/LEVHkH5ASSW1WkHKsHZeURGs3b8y19r9/2rlciwv98OFS1V7lDD5SsXBcRfRMVJHnTkEjbyTBlK8Xr1s7tNaeilx0GYFWU1Iysro3oeD2OU0Dz7XTmWVN8x9g+72KOa1Nz6mOSfg4DsGy0stuxhxbz5saP1Ivnnds2nXl/mn84DOBLNH6rN3FnXKYr7bW2fq9bf+LdBf7jJ8/eN9kzWRDgAAAAAElFTkSuQmCC',
-            users: [],
-            events: [],
-            administrators: []
-
-        }
-    };
-    if (superuser) {
-        req.body.users.push(superuser);
-    }
-
-    res = {};
-    res.json = function (data) {
-        console.log('JSON: ' + data);
-    };
-    res.send = function (data) {
-        console.log('Sending: ' + data);
-    };
-    GroupController.postGroup(req, res);
 };
 
 exports.cleanBaseGroups = function () {
@@ -107,5 +101,5 @@ exports.cleanBaseGroups = function () {
         console.log('Sending: ' + data);
     };
 
-    GroupController.deleteGroup(req, res);
+    GroupController.deleteGroupByName(req, res);
 };

@@ -108,7 +108,7 @@ router.route('/groups')
 router.route('/groups/:id')
     .get(groupController.getGroup)
     .put(groupController.putGroup)
-    .delete(groupController.deleteGroup);
+    .delete(groupController.deleteGroupById);
 router.route('/groups/:id/users/:uid')
     .post(groupController.addUserToGroup);
 router.route('/groups/:id/users/:uid')

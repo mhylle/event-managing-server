@@ -59,8 +59,25 @@ exports.putGroup = function (req, res) {
     });
 };
 
-exports.deleteGroup = function (req, res) {
+exports.deleteGroupById = function (req, res) {
     Group.findOne(req.param._id, function (error, group) {
+        if (error) {
+            res.send(error);
+        } else {
+            group.remove(function (error) {
+                if (error) {
+                    res.send(error);
+                } else {
+                    res.send({message: 'deleted'});
+                }
+            });
+
+        }
+    });
+};
+
+exports.deleteGroupByName = function (req, res) {
+    Group.findOne(req.body.name, function (error, group) {
         if (error) {
             res.send(error);
         } else {
