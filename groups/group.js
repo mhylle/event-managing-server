@@ -1,6 +1,3 @@
-/**
- * Created by mah on 05-04-2016.
- */
 var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Schema.ObjectId;
 

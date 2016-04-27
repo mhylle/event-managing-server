@@ -21,6 +21,8 @@ var groupController = require('./groups/group.controller');
 var eventController = require('./events/event.controller');
 var locationController = require('./locations/location.controller');
 var loginController = require('./security/login.controller');
+var datagenerator = require('./generateData');
+
 mongoose.connect(config.get('mongoose:uri'));
 var db = mongoose.connection;
 
@@ -38,13 +40,13 @@ app.use(morgan('combined'));
 app.use(bodyparser.urlencoded({
     extended: true
 }));
-app.use(methodOverride('X-HTTP-Method-Override'));
+// app.use(methodOverride('X-HTTP-Method-Override'));
 
-app.use(session({
-    secret: 'em-top-secret',
-    saveUninitialized: true,
-    resave: true
-}));
+// app.use(session({
+//     secret: 'em-top-secret',
+//     saveUninitialized: true,
+//     resave: true
+// }));
 
 app.use(passport.initialize());
 // require('./security/oauth');
@@ -69,9 +71,9 @@ app.use(passport.initialize());
 //     return;
 // });
 
-app.get('/ErrorExample', function (req, res, next) {
-    next(new Error('Random Error'));
-});
+// app.get('/ErrorExample', function (req, res, next) {
+//     next(new Error('Random Error'));
+// });
 
 var router = express.Router();
 
@@ -93,7 +95,7 @@ router.route('/users')
 
 
 router.route('/users/:id')
-    .get(userController.getUser)
+    .get(userController.getUserById)
     .put(userController.putUser)
     .delete(userController.deleteUser);
 //</editor-fold>
@@ -147,6 +149,14 @@ router.route('/locations/:id')
     .delete(locationController.deleteLocation);
 //</editor-fold>
 
+//<editor-fold desc="DataGeneration">
+router.route('/datageneration/superusers')
+    .post(datagenerator.createSuperUsers)
+    .delete(datagenerator.cleanSuperUsers);
+router.route('/datageneration/groups')
+    .post(datagenerator.createBaseGroups)
+    .delete(datagenerator.cleanBaseGroups);
+//</editor-fold>
 // Register all our routes with /api
 app.use('/api', router);
 

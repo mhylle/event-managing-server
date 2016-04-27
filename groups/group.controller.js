@@ -9,9 +9,9 @@ exports.postGroup = function (req, res) {
         name: req.body.name,
         type: req.body.type,
         avatar: req.body.avatar ? req.body.avatar : null,
-        users: req.body.users ? JSON.parse(req.body.users) : null,
-        events: req.body.events ? JSON.parse(req.body.events) : null,
-        administrators: req.body.administrators ? JSON.parse(req.body.administrators) : null
+        users: req.body.users ? req.body.users.length > 0 ? JSON.parse(req.body.users) : null : null,
+        events: req.body.events ? req.body.events.length > 0 ? JSON.parse(req.body.events) : null : null,
+        administrators: req.body.administrators ? req.body.administrators.length > 0 ? JSON.parse(req.body.administrators) : null : null
     });
     group.save(req, function (error) {
         if (error) {
@@ -60,7 +60,7 @@ exports.putGroup = function (req, res) {
 };
 
 exports.deleteGroup = function (req, res) {
-    Group.findOne(req.param.id, function (error, group) {
+    Group.findOne(req.param._id, function (error, group) {
         if (error) {
             res.send(error);
         } else {

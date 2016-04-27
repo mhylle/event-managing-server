@@ -21,7 +21,9 @@ exports.postUser = function (req, res) {
             return res.send(error);
         }
         res.json({location: '/api/users/' + user._id});
+
     });
+    res.send('done');
 };
 
 exports.getUsers = function (req, res) {
@@ -33,8 +35,16 @@ exports.getUsers = function (req, res) {
         res.json(users);
     });
 };
+exports.getUserByUsername = function (req, res) {
+    User.findOne({username: req.params.username}, function (error, user) {
+        if (error) {
+            return res.send(error);
+        }
+        res.json(user);
+    });
+};
 
-exports.getUser = function (req, res) {
+exports.getUserById = function (req, res) {
     User.findOne({_id: req.params.id}, function (error, user) {
         if (error) {
             return res.send(error);
@@ -48,11 +58,18 @@ exports.putUser = function (req, res) {
 };
 
 exports.deleteUser = function (req, res) {
-    User.remove({_id: req.body.id}, function (error) {
+    User.findOne(req.param.id, function (error, user) {
         if (error) {
             res.send(error);
         } else {
-            res.send({message: 'deleted'});
+            user.remove(function (error) {
+                if (error) {
+                    res.send(error);
+                } else {
+                    res.send({message: 'deleted'});
+                }
+            });
+
         }
     });
 };
