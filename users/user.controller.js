@@ -18,9 +18,10 @@ exports.postUser = function (req, res) {
 
     user.save(req, function (error) {
         if (error) {
-            return res.send(error);
+            res.send(error);
+        } else {
+            res.json({location: '/api/users/' + user._id});
         }
-        res.json({location: '/api/users/' + user._id});
     });
 };
 
@@ -29,25 +30,26 @@ exports.getUsers = function (req, res) {
         if (error) {
             return res.send(error);
         }
-
         res.json(users);
     });
 };
 exports.getUserByUsername = function (req, res) {
     User.findOne({username: req.params.username}, function (error, user) {
         if (error) {
-            return res.send(error);
+            res.send(error);
+        } else {
+            res.json(user);
         }
-        res.json(user);
     });
 };
 
 exports.getUserById = function (req, res) {
     User.findOne({_id: req.params.id}, function (error, user) {
         if (error) {
-            return res.send(error);
+            res.send(error);
+        } else {
+            res.json(user);
         }
-        res.json(user);
     });
 };
 
@@ -67,7 +69,6 @@ exports.deleteUser = function (req, res) {
                     res.send({message: 'deleted'});
                 }
             });
-
         }
     });
 };
