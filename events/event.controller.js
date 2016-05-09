@@ -3,6 +3,7 @@
 var Event = require('./event');
 var User = require('../users/user');
 var Location = require('../locations/location');
+var Activity = require('../activities/activity');
 var User = require('../users/user');
 
 function retrieveUserlist(users, done) {
@@ -47,6 +48,7 @@ function saveEvent(req, res, event) {
     event.nonmemberprice = req.body.nonmemberprice ? req.body.nonmemberprice : event.nonmemberprice;
     event.defaultprice = req.body.defaultprice ? req.body.defaultprice : event.defaultprice;
     event.locations = req.body.locations ? JSON.parse(req.body.locations) : event.locations;
+    event.activities = req.body.activities? JSON.parse(req.body.activities) : event.activities;
     event.users = req.body.users ? JSON.parse(req.body.users) : event.users;
     event.administrators = req.body.administrators ? JSON.parse(req.body.administrators) : event.administrators;
 
@@ -206,6 +208,50 @@ exports.removeLocationFromEvent = function (req, res) {
             }
 
             event.locations.pull(location);
+            event.save(req, function (error) {
+                if (error) {
+                    return res.send(error);
+                }
+                res.json({location: '/api/events/' + event._id});
+            });
+        });
+    });
+};
+
+exports.addActivityToEvent = function (req, res) {
+    Event.findOne({_id: req.params.id}, function (error, event) {
+        if (error) {
+            return res.send(error);
+        }
+        Activity.findOne({_id: req.params.aid}, function (error, activity) {
+            if (error) {
+                return res.send(error);
+            }
+            if (!event.activities) {
+                event.activities = [];
+            }
+            event.activities.push(activity);
+            event.save(req, function (error) {
+                if (error) {
+                    return res.send(error);
+                }
+                res.json({location: '/api/events/' + event._id});
+            });
+        });
+    });
+};
+
+exports.removeActivityFromEvent = function (req, res) {
+    Event.findOne({_id: req.params.id}, function (error, event) {
+        if (error) {
+            return res.send(error);
+        }
+        Activity.findOne({_id: req.params.aid}, function (error, activity) {
+            if (error) {
+                return res.send(error);
+            }
+
+            event.activities.pull(activity);
             event.save(req, function (error) {
                 if (error) {
                     return res.send(error);

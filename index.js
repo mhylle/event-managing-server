@@ -20,6 +20,7 @@ var userController = require('./users/user.controller');
 var groupController = require('./groups/group.controller');
 var eventController = require('./events/event.controller');
 var locationController = require('./locations/location.controller');
+var activityController = require('./activities/activity.controller');
 var loginController = require('./security/login.controller');
 var datagenerator = require('./generateData');
 
@@ -136,6 +137,10 @@ router.route('/events/:id/locations/:lid')
     .post(eventController.addLocationToEvent);
 router.route('/events/:id/locations/:lid')
     .delete(eventController.removeLocationFromEvent);
+router.route('/events/:id/activities/:aid')
+    .post(eventController.addActivityToEvent);
+router.route('/events/:id/activities/:aid')
+    .delete(eventController.removeActivityFromEvent);
 //</editor-fold>
 
 //<editor-fold desc="Locations">
@@ -147,6 +152,16 @@ router.route('/locations/:id')
     .get(locationController.getLocation)
     .put(locationController.putLocation)
     .delete(locationController.deleteLocation);
+//</editor-fold>
+//<editor-fold desc="Activities">
+router.route('/activities')
+    .post(activityController.postActivity)
+    .get(activityController.getActivities);
+
+router.route('/activities/:id')
+    .get(activityController.getActivity)
+    .put(activityController.putActivity)
+    .delete(activityController.deleteActivity);
 //</editor-fold>
 
 //<editor-fold desc="DataGeneration">
