@@ -20,7 +20,7 @@ exports.postUser = function (req, res) {
         if (error) {
             res.send(error);
         } else {
-            res.json({location: '/api/users/' + user._id});
+            res.json({status: 'ok', location: '/api/users/' + user._id});
         }
     });
 };
