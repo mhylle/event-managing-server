@@ -4,7 +4,6 @@ var Event = require('./event');
 var User = require('../users/user');
 var Location = require('../locations/location');
 var Activity = require('../activities/activity');
-var User = require('../users/user');
 
 function retrieveUserlist(users, done) {
     if (users) {

@@ -171,6 +171,9 @@ router.route('/datageneration/superusers')
 router.route('/datageneration/groups')
     .post(datagenerator.createBaseGroups)
     .delete(datagenerator.cleanBaseGroups);
+router.route('/datageneration/locations')
+    .post(datagenerator.createBaseLocations)
+    .delete(datagenerator.cleanBaseLocations);
 //</editor-fold>
 // Register all our routes with /api
 app.use('/api', router);

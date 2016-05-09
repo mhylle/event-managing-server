@@ -1,64 +1,65 @@
 "use strict";
 
-var Location = require('./location');
+var Activity = require('./activity');
 
-exports.postLocation = function (req, res) {
-
-    var location = new Location({
-        name: req.body.name,
-        avatar: req.body.avatar || null,
-        description: req.body.description || null
-    });
-
-    location.save(req, function (error) {
-        if (error) {
-            return res.send(error);
-        }
-        res.json({location: '/api/locations/' + location._id});
-    });
+exports.postActivity= function (req, res) {
+    return res.json({message: 'Activity creation is currently disabled.'});
+    // var activity = new Activity({
+    //     name: req.body.name,
+    //     avatar: req.body.avatar || null,
+    //     description: req.body.description || null
+    // });
+    //
+    // activity.save(req, function (error) {
+    //     if (error) {
+    //         return res.send(error);
+    //     }
+    //     res.json({location: '/api/activities/' + activity._id});
+    // });
 };
 
 
-exports.getLocations = function (req, res) {
-    Location.find(function (error, locations) {
-        if (error) {
-            return res.send(error);
-        }
-
-        res.json(locations);
-    });
-};
-
-exports.getLocation = function (req, res) {
-    Location.findOne({_id: req.params.id}, function (error, location) {
-        if (error) {
-            return res.send(error);
-        }
-        res.json(location);
-    });
-};
-
-exports.putLocation = function (req, res) {
-    Location.findOne({_id: req.params.id}, function (error, location) {
+exports.getActivities = function (req, res) {
+    Activity.find(function (error, activities) {
         if (error) {
             return res.send(error);
         }
 
-        location.name = req.body.name;
-        location.avatar = req.body.avatar || null;
-        location.description = req.body.description || null;
-
-        location.save(req, function (error) {
-            if (error) {
-                return res.send(error);
-            }
-            res.json({location: '/api/locations/' + location._id});
-        });
+        res.json(activities);
     });
 };
 
-exports.deleteLocation = function (req, res) {
-    Location.remove({_id: req.param.id}, function (error) {
+exports.getActivity = function (req, res) {
+    Activity.findOne({_id: req.params.id}, function (error, activity) {
+        if (error) {
+            return res.send(error);
+        }
+        res.json(activity);
+    });
+};
+
+exports.putActivity = function (req, res) {
+    Activity.findOne({_id: req.params.id}, function (error, activity) {
+        if (error) {
+            return res.send(error);
+        }
+
+        return res.json({message: 'Activity creation is currently disabled.'});
+        // todo implement activity creationg
+        // activity.name = req.body.name;
+        // activity.avatar = req.body.avatar || null;
+        // activity.description = req.body.description || null;
+        // activity.save(req, function (error) {
+        //     if (error) {
+        //         return res.send(error);
+        //     }
+        //     res.json({location: '/api/activities/' + activity._id});
+        // });
+    });
+};
+
+exports.deleteActivity = function (req, res) {
+    Activity.remove({_id: req.param.id}, function (error) {
         if (error) {
             res.send(error);
         } else {
