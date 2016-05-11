@@ -47,7 +47,7 @@ function saveEvent(req, res, event) {
     event.nonmemberprice = req.body.nonmemberprice ? req.body.nonmemberprice : event.nonmemberprice;
     event.defaultprice = req.body.defaultprice ? req.body.defaultprice : event.defaultprice;
     event.locations = req.body.locations ? JSON.parse(req.body.locations) : event.locations;
-    event.activities = req.body.activities? JSON.parse(req.body.activities) : event.activities;
+    event.activities = req.body.activities ? JSON.parse(req.body.activities) : event.activities;
     event.users = req.body.users ? JSON.parse(req.body.users) : event.users;
     event.administrators = req.body.administrators ? JSON.parse(req.body.administrators) : event.administrators;
 
@@ -71,6 +71,7 @@ function saveEvent(req, res, event) {
 
 exports.postEvent = function (req, res) {
     var users = null;
+
     if (req.body.location) {
         var locationArray = JSON.parse(req.body.location);
         Location.find({_id: {$in: locationArray}}, function (error, locations) {
@@ -84,7 +85,7 @@ exports.postEvent = function (req, res) {
         saveEvent(req, res, null, users);
     }
 
-}
+};
 
 exports.getEvents = function (req, res) {
     Event.find(function (error, events) {
