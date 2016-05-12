@@ -29,12 +29,9 @@ function retrieveLocations(locations, done) {
 // 5711fbd7fdfdf8bc3433ea12
 // 5711fbe4fdfdf8bc3433ea13
 
-function saveEvent(req, res, event) {
-    var creation = false;
-    if (!event) {
-        creation = true;
-        event = new Event();
-    }
+function saveEvent(req, res) {
+    var creation = true;
+    var event = new Event();
     event.name = req.body.name ? req.body.name : event.name;
     event.avatar = req.body.avatar ? req.body.avatar : event.avatar;
     event.start = req.body.start ? req.body.start : event.start;
@@ -72,18 +69,22 @@ function saveEvent(req, res, event) {
 exports.postEvent = function (req, res) {
     var users = null;
 
-    if (req.body.location) {
-        var locationArray = JSON.parse(req.body.location);
-        Location.find({_id: {$in: locationArray}}, function (error, locations) {
-            if (error) {
-                return res.send(error);
-            }
-
-            saveEvent(req, res, locations, users);
-        });
-    } else {
-        saveEvent(req, res, null, users);
-    }
+    // if (req.body.location) {
+    //     try {
+    //         var locationArray = req.body.location;
+    //     } catch (e) {
+    //         console.log(e);
+    //     }
+    //     Location.find({_id: {$in: locationArray}}, function (error, locations) {
+    //         if (error) {
+    //             return res.send(error);
+    //         }
+    //
+    //         saveEvent(req, res, locations, users);
+    //     });
+    // } else {
+        saveEvent(req, res);
+    // }
 
 };
 
