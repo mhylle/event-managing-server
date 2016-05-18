@@ -22,21 +22,12 @@ var UserSchema = new mongoose.Schema({
     }
 });
 
-// UserSchema.pre('save', function (next) {
-//     var self = this;
-//     this.salt = crypto.randomBytes(32).toString('hex');
-//     this.hash = crypto.createHash('sha256').update(this.password).digest('hex');
-//     var cipher = crypto.createCipher('aes-256-cbc', self.salt);
-//     cipher.update(this.password, 'utf8', 'base64');
-//
-//     var encryptedPassword = cipher.final('base64');
-//     this.salt = cipher;
-//     this.hash = encryptedPassword;
-//     next();
-// });
-
 UserSchema.methods.encryptPassword = function (password) {
-    return crypto.createHmac('sha1', this.salt).update(password).digest('hex');
+    var cipher = crypto.createCipher('aes-256-cbc', this.salt);
+    cipher.update(password, 'utf8', 'base64');
+
+    return  cipher.final('base64');
+    // return crypto.createHmac('sha1', this.salt).update(password).digest('hex');
 };
 
 UserSchema.virtual('userId')

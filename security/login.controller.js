@@ -25,7 +25,21 @@ exports.login = function (req, res, next) {
         }
 
         if (user.checkPassword(credentials[1])) {
-            return res.status(200).json({accessToken: UUID.generate()});
+            return res.status(200).json(
+                {
+                    accessToken: UUID.generate(),
+                    user: {
+                        _id: user._id,
+                        username: user.username,
+                        firstname: user.firstname,
+                        middlename: user.middlename,
+                        lastname: user.lastname,
+                        email: user.email,
+                        phone: user.phone,
+                        birthday: user.birthday,
+                        avatar: user.avatar
+                    }
+                });
         } else {
             return res.status(401).json({message: 'Password did not match'});
         }
