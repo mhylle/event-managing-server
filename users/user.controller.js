@@ -8,6 +8,7 @@ exports.postUser = function (req, res) {
     var user = new User({
         username: req.body.username,
         firstname: req.body.firstname,
+        password: req.body.password,
         middlename: req.body.middlename || null,
         lastname: req.body.lastname,
         email: req.body.email,
