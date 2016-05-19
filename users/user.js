@@ -2,6 +2,7 @@
 
 "use strict";
 var mongoose = require('mongoose');
+var ObjectId = require('mongoose').Schema.ObjectId;
 var crypto = require('crypto');
 
 var UserSchema = new mongoose.Schema({
@@ -15,7 +16,7 @@ var UserSchema = new mongoose.Schema({
     phone: {type: String},
     birthday: {type: Date},
     avatar: {type: String},
-    groups: {type: Array},
+    groups: [{type: ObjectId, ref: 'Group'}],
     created: {
         type: Date,
         default: Date.now
