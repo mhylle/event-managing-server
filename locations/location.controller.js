@@ -7,7 +7,8 @@ exports.postLocation = function (req, res) {
     var location = new Location({
         name: req.body.name,
         avatar: req.body.avatar || null,
-        description: req.body.description || null
+        description: req.body.description || null,
+        authorizedGroups: req.body.authorizedGroups
     });
 
     location.save(req, function (error) {
