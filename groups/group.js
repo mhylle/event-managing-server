@@ -7,7 +7,8 @@ var GroupSchema = new mongoose.Schema({
     avatar: {type: String},
     users: [{type: ObjectId, ref: 'User'}],
     events: [{type: ObjectId, ref: 'Event'}],
-    administrators: [{type: ObjectId, ref: 'User'}]
+    administrators: [{type: ObjectId, ref: 'User'}],
+    authorizations: [{type: ObjectId, ref: 'Authorizations'}]
 });
 
 

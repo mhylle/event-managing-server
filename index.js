@@ -12,7 +12,6 @@ var oauth2 = require('./security/oauth2');
 // var favicon = require('serve-favicon');
 var morgan = require('morgan');
 var methodOverride = require('method-override');
-var acl = require('acl');
 
 var log = require('./libs/log')(module);
 
@@ -34,9 +33,7 @@ db.on('error', function (err) {
 db.once('open', function callback() {
     log.info('Connected to the database');
 });
-acl = new acl(new acl.mongodbBackend(mongoose.connection.db));
-acl.allow('admin', ['/', '/groups', '/events', '/users', '/locations'], '*');
-acl.allow('public', ['/login'], '*');
+
 var app = express();
 
 // app.use(favicon);
