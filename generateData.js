@@ -10,7 +10,15 @@ var Event = require('./events/event');
 
 var faker = require('faker');
 
-function populateReqUser(req) {
+// Instructions:
+// Request order:
+// /api/datageneration/superusers
+// /api/datageneration/groups
+//
+// after the above all else can be made from the gui.
+// the above will create a superuser and an admin group.
+
+function populateRequestForUser(req) {
     req.body.username = 'admin';
     req.body.password = 'administrator';
     req.body.firstname = 'Super';
@@ -22,12 +30,12 @@ function populateReqUser(req) {
     req.body.avatar = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAALiSURBVDjLhZJdTJtlGIa/hISExGRHO1BjthEiRp1HzHgEo4vGYTAkGwElohkpyIYRyFhZgQIBAorVqtSyCmxpC8Gu42dFkLBVWBijShYYPxJBQYSQEMeQn69rbLl86uaMMN3BffLmve7nen8UQPlXBqzREiMeywgD5gBXTAF6a0foqTLSZojeuX8nnC+gircVxjolbhjtgOt26DeDq0DFmZu/u2DAGk7/uR6GHXDTJZst0F2DTIWOEmjTQacBPB9Dux6+TOvBkhz+T4HHYsIrcKigtzYgoEZ0Ix5Maj4VgU2r2XQkBaebU5nprGK08RXGzM+lC2w+yLefBRhukYnVATrK9tFe9JjoVoruEI7sIWwnKpe6nj6x7NGxdqsLNpa4c8vF8Eev/qbQZzQx2CR6ppCuhnbdk1zM/5mvK6A1F1pOsuVKYXWiZNv/62WW+2tRx9sIzA8ycV77hyK60ww57p3NdTpCdC/iLoemdCfW1LhV56GC1Yni7aA6iPpTDre/e48f7BlMNqSjGl6YUUTXz5DcslOmObLDRFfF/i6cOx432XeqfHX8LEHfDbZm38a3kMb6lJ6FL2JRL2hBH7mmiK6fwUawa0O3G0F9CtQnrdz8JMaw/L3uPpyO75c3+X2iiFmzZt1neOavo1F8YEOR253hUgGiq1KXFI4pIba74vFjU9+cDgbVa/jmMri78BZrYjJjPnJ39sMXowRcpCYmVDCpUP/G+6KbyeeJe0JP1pD9VMZkt56xHhOL3mS25tK4PVrIj3XxK9PGlyIfPG3xgThJsrLzazo/OALr80xbj+PRP8H1+qNcrYzFZjzTsOvb7/rKkgrt8wH/jTr83k/xVsXzVeb+gKW2ZLu6unqztLQ06pEFKYf3BmveeZarNQnBK0bNgFt3MFJgu8AbhYWFbf9b4Ha7X3M6nYs2m61450aBy/Ly8vpzcnJe/s8Cga0Cv/6ws4YicGJWVlaCJOzvtT8B/ZHVkQhA0SkAAAAASUVORK5CYII=';
 }
 exports.createSuperUsers = function (req, res) {
-    populateReqUser(req);
+    populateRequestForUser(req);
     UserController.postUser(req, res);
 };
 
 exports.cleanSuperUsers = function (req, res) {
-    populateReqUser(req);
+    populateRequestForUser(req);
     UserController.deleteUser(req, res);
 };
 
@@ -57,8 +65,6 @@ exports.cleanBaseGroups = function (req, res) {
         populateRequestForGroup(req, user);
         GroupController.deleteGroupByName(req, res);
     });
-
-
 };
 
 function populateRequestForLocation(req, group) {

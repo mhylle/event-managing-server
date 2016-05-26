@@ -31,6 +31,7 @@
     "passport-http-bearer": "^1.0.1"
   },
   "dependencies": {
+    "acl": "^0.4.9",
     "faker": "^3.1.0",
     "lodash": "^4.9.0",
     "method-override": "^2.3.5",
