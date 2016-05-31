@@ -7,8 +7,7 @@ var LocationSchema = new mongoose.Schema({
     name: {type: String, unique: true, required: true},
     avatar: {type: String},
     description: {type: String},
-    authorizedGroups: [{type: ObjectId, ref: 'Group', required: true}],
-    unAuthorizedGroups: [{type: ObjectId, ref: 'Group'}]
+    authorizations: [{type: ObjectId, ref: 'Authorization'}],
 });
 
 
