@@ -55,6 +55,12 @@ app.use(function (req, res, next) {
     next();
 });
 
+// var acl = require('acl');
+// acl = new acl(new acl.mongodbBackend());
+
+
+// acl.allow('admin', '*');
+
 // app.use(session({
 //     secret: 'em-top-secret',
 //     saveUninitialized: true,

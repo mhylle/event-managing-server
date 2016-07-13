@@ -1,6 +1,8 @@
 "use strict";
 
 var Authorization = require('./authorization');
+var groupController = require('../../groups/group.controller');
+var Group = require('../../groups/group');
 
 exports.postAuthorization = function (req, res) {
     var authorization = new Authorization({
@@ -82,4 +84,22 @@ exports.deleteAuthorizationByName = function (req, res) {
 
         }
     });
+};
+
+exports.hasAutorization = function (action, operation, user) {
+    // get user group
+    // is the group part of the action
+    // if not, return false
+    // if yes, does the group have access to the operation
+    // if yes, return yes
+    // else return false
+    User.findOne({_id: user._id})
+        .populate('groups')
+        .exec(function (error, user) {
+            if (error) {
+                console.log('Error while populating groups in the user');
+            }
+            
+        });
+
 };
